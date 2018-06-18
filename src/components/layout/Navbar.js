@@ -1,50 +1,89 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import {withAuth} from "@okta/okta-react/dist/index";
 
-class Navbar extends React.Component {
-    render() {
-        return(
-            <nav className="navbar navbar-default">
-                <div className="container">
+export default withAuth(
+    class Navbar extends React.Component {
 
-                    <div className="navbar-header">
-                        <button type="button" className="navbar-toggle" data-toggle="collapse"
-                                data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                            <span className="sr-only">Toggle navigation</span>
-                            <span className="icon-bar"> </span>
-                            <span className="icon-bar"> </span>
-                            <span className="icon-bar"> </span>
+        state = {
+            authenticated: null
+        };
+
+        checkAuthentication = async () => {
+            const authenticated = await this.props.auth.isAuthenticated();
+            if (authenticated !== this.state.authenticated) {
+                this.setState({ authenticated })
+            }
+        };
+
+        async componentDidMount() {
+            this.checkAuthentication()
+        }
+
+        async componentDidUpdate() {
+            this.checkAuthentication()
+        }
+
+        login = async () => {
+            this.props.auth.login('/')
+        };
+
+        logout = async () => {
+            this.props.auth.logout('/')
+        };
+
+        render() {
+            if (this.state.authenticated === null) return null;
+
+            const logButton = this.state.authenticated ? (
+                <button className="btn btn-dark btn-md auth-button" onClick={this.logout}>
+                    Logout
+                </button> ) : (
+                <button className="btn btn-dark btn-md auth-button" onClick={this.login}>
+                    Login
+                </button>
+            );
+
+            const Dashboard = this.state.authenticated ? (
+                <Link className="nav-link" to="/staff">
+                    Dashboard
+                </Link>
+            ):(
+                null
+            );
+
+            return(
+                <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
+                    <div className="container">
+                        <Link className="navbar-brand" to="/">
+                            Blogger
+                        </Link>
+                        <button
+                            className="navbar-toggler"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#navbarNav"
+                        >
+                            <span className="navbar-toggler-icon"/>
                         </button>
+                        <div className="collapse navbar-collapse" id="navbarNav">
+                            <ul className="navbar-nav ml-auto">
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/">
+                                        Home
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    {Dashboard}
+                                </li>
+                                <li>
+                                    {logButton}
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-
-
-                    <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul className="nav navbar-nav">
-                            <li className="active">
-                                <Link className="nav-link" to="/">
-                                    Home
-                                </Link>
-                            </li>
-                            <li>
-                                <Link className="nav-link" to="/staff">
-                                    Staff
-                                </Link>
-                            </li>
-                        </ul>
-                        <ul className="nav navbar-nav navbar-right">
-                            <li>
-                                <Link className="nav-link" to="/">
-                                    Logout
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-
-            </nav>
-        )
+                </nav>
+            )
+        }
     }
-}
-
-export default Navbar
+)
