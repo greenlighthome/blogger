@@ -24,8 +24,10 @@ export default withAuth(
         render() {
             return (
                 <div className="carousel slide" data-ride="carousel">
+
                     <div className="carousel-inner">
                         <div className="carousel-item active">
+                            <h1 className="display-4 bigger-text">Hello World!</h1>
                             <img className="d-block w-100" src="img1.jpg" alt="Toledo, Spain"/>
                         </div>
                     </div>

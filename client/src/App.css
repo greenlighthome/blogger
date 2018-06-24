@@ -1,0 +1,34 @@
+.App {
+  text-align: center;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #ffffff;
+}
+button.auth-button {}
+
+.carousel {
+  z-index: -1;
+  -moz-user-select: none;
+}
+.carousel-inner {
+  height: 400px;
+}
+
+h1.bigger-text {
+  width: 100%;
+  position: absolute;
+  font-size: 6vw;
+  text-align: center;
+  font-weight: bold;
+  color: #e9e9e9;
+  margin-top: 9%;
+}
+
+.jumbotron h1.display-4 {
+  font-size: 7vw;
+}
+
+.mb-4, .my-4 {
+  margin-bottom: 0 !important;
+}
